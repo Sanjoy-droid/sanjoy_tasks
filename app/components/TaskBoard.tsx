@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DragStartEvent } from "@dnd-kit/core";
 
 export function TaskBoard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -77,14 +78,13 @@ export function TaskBoard() {
     setTasks(completeTask(tasks, id, isCompleted));
   };
 
-  const handleDragStart = (event: any) => {
+  const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const draggedTask = tasks.find((task) => task.id === active.id);
     if (draggedTask) {
       setActiveTask(draggedTask);
     }
   };
-
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
 
@@ -166,62 +166,68 @@ export function TaskBoard() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative">
-        <TaskColumn
-          title="DO FIRST"
-          status="DO_FIRST"
-          tasks={tasks}
-          onAddTask={(content, status) =>
-            setTasks(addTask(tasks, content, status))
-          }
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onCompleteTask={handleCompleteTask}
-          showAddInput={false}
-        />
-        <TaskColumn
-          title="DO LATER"
-          status="DO_LATER"
-          tasks={tasks}
-          onAddTask={(content, status) =>
-            setTasks(addTask(tasks, content, status))
-          }
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onCompleteTask={handleCompleteTask}
-          showAddInput={false}
-        />
-        <TaskColumn
-          title="DELEGATE"
-          status="DELEGATE"
-          tasks={tasks}
-          onAddTask={(content, status) =>
-            setTasks(addTask(tasks, content, status))
-          }
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onCompleteTask={handleCompleteTask}
-          showAddInput={false}
-        />
-        <TaskColumn
-          title="ELIMINATE"
-          status="ELIMINATE"
-          tasks={tasks}
-          onAddTask={(content, status) =>
-            setTasks(addTask(tasks, content, status))
-          }
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onCompleteTask={handleCompleteTask}
-          showAddInput={false}
-        />
+      <div className="relative grid grid-cols-2 md:grid-cols-2 gap-6 pb-16">
+        {/* Task Columns */}
+        <div className="flex flex-col gap-4">
+          <TaskColumn
+            title="DO FIRST"
+            status="DO_FIRST"
+            tasks={tasks}
+            onAddTask={(content, status) =>
+              setTasks(addTask(tasks, content, status))
+            }
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
+            showAddInput={false}
+          />
+          <TaskColumn
+            title="DELEGATE"
+            status="DELEGATE"
+            tasks={tasks}
+            onAddTask={(content, status) =>
+              setTasks(addTask(tasks, content, status))
+            }
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
+            showAddInput={false}
+          />
+        </div>
 
-        {/* Central Add Button */}
-        <div className="absolute inset-x-0 bottom-0 flex justify-center transform translate-y-1/2 z-10">
+        <div className="flex flex-col gap-4">
+          <TaskColumn
+            title="DO LATER"
+            status="DO_LATER"
+            tasks={tasks}
+            onAddTask={(content, status) =>
+              setTasks(addTask(tasks, content, status))
+            }
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
+            showAddInput={false}
+          />
+          <TaskColumn
+            title="ELIMINATE"
+            status="ELIMINATE"
+            tasks={tasks}
+            onAddTask={(content, status) =>
+              setTasks(addTask(tasks, content, status))
+            }
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            onCompleteTask={handleCompleteTask}
+            showAddInput={false}
+          />
+        </div>
+
+        {/* Central Floating Add Button */}
+        <div className="absolute left-1/2 top-48 transform -translate-x-1/2 -translate-y-1/2 z-10">
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="rounded-full h-14 w-14 shadow-lg bg-primary">
-                <Plus size={24} />
+              <Button className="rounded-full h-16 w-16 shadow-xl bg-primary flex items-center justify-center">
+                <Plus size={28} />
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
