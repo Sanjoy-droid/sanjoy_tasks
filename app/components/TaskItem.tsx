@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Task } from "@/lib/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Check, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,9 +17,15 @@ interface TaskItemProps {
   task: Task;
   onDelete: (id: string) => void;
   onEdit: (id: string, content: string) => void;
+  onComplete?: (id: string, isCompleted: boolean) => void;
 }
 
-export function TaskItem({ task, onDelete, onEdit }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onDelete,
+  onEdit,
+  onComplete,
+}: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(task.content);
 
@@ -38,6 +44,12 @@ export function TaskItem({ task, onDelete, onEdit }: TaskItemProps) {
     setIsEditing(false);
   };
 
+  const handleToggleComplete = () => {
+    if (onComplete) {
+      onComplete(task.id, !task.completed);
+    }
+  };
+
   return (
     <>
       <div
@@ -45,15 +57,43 @@ export function TaskItem({ task, onDelete, onEdit }: TaskItemProps) {
         style={style}
         {...attributes}
         {...listeners}
-        className="p-3 mb-2 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-200 dark:border-slate-700 cursor-grab"
+        className={`p-3 mb-2 rounded-md shadow-sm border cursor-grab ${
+          task.completed
+            ? "bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600"
+            : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
+        }`}
       >
         <div className="flex justify-between items-center">
-          <span className="text-sm">{task.content}</span>
+          <div className="flex items-center gap-2">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleToggleComplete}
+              className="h-6 w-6"
+            >
+              {task.completed ? (
+                <CircleCheck size={16} className="text-green-500" />
+              ) : (
+                <Check size={16} />
+              )}
+            </Button>
+            <span
+              className={`text-sm ${
+                task.completed
+                  ? "line-through text-slate-500 dark:text-slate-400"
+                  : ""
+              }`}
+            >
+              {task.content}
+            </span>
+          </div>
+
           <div className="flex space-x-1">
             <Button
               size="icon"
               variant="ghost"
               onClick={() => setIsEditing(true)}
+              className="h-6 w-6"
             >
               <Pencil size={16} />
             </Button>
@@ -61,6 +101,7 @@ export function TaskItem({ task, onDelete, onEdit }: TaskItemProps) {
               size="icon"
               variant="ghost"
               onClick={() => onDelete(task.id)}
+              className="h-6 w-6"
             >
               <Trash2 size={16} />
             </Button>

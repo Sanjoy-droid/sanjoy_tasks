@@ -18,6 +18,8 @@ interface TaskColumnProps {
   onAddTask: (content: string, status: TaskStatus) => void;
   onEditTask: (id: string, content: string) => void;
   onDeleteTask: (id: string) => void;
+  onCompleteTask?: (id: string, isCompleted: boolean) => void;
+  showAddInput?: boolean;
 }
 
 export function TaskColumn({
@@ -27,10 +29,11 @@ export function TaskColumn({
   onAddTask,
   onEditTask,
   onDeleteTask,
+  onCompleteTask,
+  showAddInput = true,
 }: TaskColumnProps) {
   const [newTaskContent, setNewTaskContent] = useState("");
   const { setNodeRef } = useDroppable({ id: status });
-
   const statusTasks = tasks.filter((task) => task.status === status);
 
   const handleAddTask = () => {
@@ -86,17 +89,19 @@ export function TaskColumn({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex space-x-2">
-          <Input
-            value={newTaskContent}
-            onChange={(e) => setNewTaskContent(e.target.value)}
-            placeholder="Add a task..."
-            onKeyDown={handleKeyDown}
-          />
-          <Button onClick={handleAddTask}>
-            <Plus size={16} />
-          </Button>
-        </div>
+        {showAddInput && (
+          <div className="mb-4 flex space-x-2">
+            <Input
+              value={newTaskContent}
+              onChange={(e) => setNewTaskContent(e.target.value)}
+              placeholder="Add a task..."
+              onKeyDown={handleKeyDown}
+            />
+            <Button onClick={handleAddTask}>
+              <Plus size={16} />
+            </Button>
+          </div>
+        )}
 
         <div ref={setNodeRef} className="min-h-[100px]">
           <SortableContext
@@ -109,6 +114,7 @@ export function TaskColumn({
                 task={task}
                 onDelete={onDeleteTask}
                 onEdit={onEditTask}
+                onComplete={onCompleteTask}
               />
             ))}
           </SortableContext>

@@ -32,6 +32,8 @@ export const addTask = (
     id: uuidv4(),
     content,
     status,
+    completed: false,
+    order: tasks.length > 0 ? Math.max(...tasks.map((t) => t.order)) + 1 : 0,
   };
   const updatedTasks = [...tasks, newTask];
   saveTasks(updatedTasks);
@@ -91,3 +93,11 @@ export const reorderTasks = (
   saveTasks(updatedTasks);
   return updatedTasks;
 };
+
+export function completeTask(
+  tasks: Task[],
+  id: string,
+  completed: boolean
+): Task[] {
+  return tasks.map((task) => (task.id === id ? { ...task, completed } : task));
+}
