@@ -49,23 +49,23 @@ export function TaskColumn({
     }
   };
 
-  // background color based on status
+  //bg coloring
   const getColumnColor = () => {
     switch (status) {
       case "DO_FIRST":
-        return "bg-emerald-100 dark:bg-emerald-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
+        return "bg-emerald-100 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800";
       case "DO_LATER":
-        return "bg-sky-100 dark:bg-sky-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
+        return "bg-sky-100 dark:bg-sky-900/30 border-sky-200 dark:border-sky-800";
       case "DELEGATE":
-        return "bg-amber-100 dark:bg-amber-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
+        return "bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800";
       case "ELIMINATE":
-        return "bg-rose-100 dark:bg-rose-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
+        return "bg-rose-100 dark:bg-rose-900/30 border-rose-200 dark:border-rose-800";
       default:
-        return "bg-slate-50 dark:bg-slate-900 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
+        return "bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700";
     }
   };
 
-  //header text color based on status
+  //header text color
   const getHeaderColor = () => {
     switch (status) {
       case "DO_FIRST":
@@ -82,8 +82,8 @@ export function TaskColumn({
   };
 
   return (
-    <Card className={`h-full ${getColumnColor()}`}>
-      <CardHeader>
+    <Card className={`h-full rounded-xl shadow-lg border ${getColumnColor()}`}>
+      <CardHeader className="pb-2">
         <CardTitle className={`text-lg font-bold ${getHeaderColor()}`}>
           {title}
         </CardTitle>
@@ -102,8 +102,7 @@ export function TaskColumn({
             </Button>
           </div>
         )}
-
-        <div ref={setNodeRef} className="min-h-[100px]">
+        <div ref={setNodeRef} className="min-h-[200px] flex flex-col">
           <SortableContext
             items={statusTasks.map((task) => task.id)}
             strategy={verticalListSortingStrategy}
