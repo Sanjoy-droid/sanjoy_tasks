@@ -5,7 +5,7 @@ import { Task, TaskStatus } from "./types";
 export const loadTasks = (): Task[] => {
   if (typeof window === "undefined") return [];
 
-  const saved = localStorage.getItem("tasks");
+  const saved = sessionStorage.getItem("tasks");
   if (saved) {
     try {
       return JSON.parse(saved);
@@ -16,17 +16,17 @@ export const loadTasks = (): Task[] => {
   return [];
 };
 
-// Save tasks to localStorage
+// Save tasks to sessionStorage
 export const saveTasks = (tasks: Task[]) => {
   if (typeof window === "undefined") return;
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  sessionStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
 // Add a new task
 export const addTask = (
   tasks: Task[],
   content: string,
-  status: TaskStatus
+  status: TaskStatus,
 ): Task[] => {
   const newTask: Task = {
     id: uuidv4(),
@@ -44,10 +44,10 @@ export const addTask = (
 export const updateTask = (
   tasks: Task[],
   id: string,
-  content: string
+  content: string,
 ): Task[] => {
   const updatedTasks = tasks.map((task) =>
-    task.id === id ? { ...task, content } : task
+    task.id === id ? { ...task, content } : task,
   );
   saveTasks(updatedTasks);
   return updatedTasks;
@@ -65,7 +65,7 @@ export const reorderTasks = (
   tasks: Task[],
   taskId: string,
   destinationStatus: TaskStatus,
-  newIndex: number
+  newIndex: number,
 ): Task[] => {
   const taskToMove = tasks.find((task) => task.id === taskId);
   if (!taskToMove) return tasks;
@@ -74,7 +74,7 @@ export const reorderTasks = (
 
   // Get tasks with the destination status
   const destinationTasks = tasksWithoutMoved.filter(
-    (task) => task.status === destinationStatus
+    (task) => task.status === destinationStatus,
   );
 
   // Insert the task at the new index
@@ -86,7 +86,7 @@ export const reorderTasks = (
 
   // Combine all tasks
   const otherTasks = tasksWithoutMoved.filter(
-    (task) => task.status !== destinationStatus
+    (task) => task.status !== destinationStatus,
   );
   const updatedTasks = [...otherTasks, ...updatedDestinationTasks];
 
@@ -97,7 +97,7 @@ export const reorderTasks = (
 export function completeTask(
   tasks: Task[],
   id: string,
-  completed: boolean
+  completed: boolean,
 ): Task[] {
   return tasks.map((task) => (task.id === id ? { ...task, completed } : task));
 }
