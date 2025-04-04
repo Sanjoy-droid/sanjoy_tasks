@@ -53,15 +53,15 @@ export function TaskColumn({
   const getColumnColor = () => {
     switch (status) {
       case "DO_FIRST":
-        return "bg-emerald-50 dark:bg-emerald-950";
+        return "bg-emerald-100 dark:bg-emerald-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
       case "DO_LATER":
-        return "bg-sky-50 dark:bg-sky-950";
+        return "bg-sky-100 dark:bg-sky-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
       case "DELEGATE":
-        return "bg-amber-50 dark:bg-amber-950";
+        return "bg-amber-100 dark:bg-amber-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
       case "ELIMINATE":
-        return "bg-rose-50 dark:bg-rose-950";
+        return "bg-rose-100 dark:bg-rose-950 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
       default:
-        return "bg-slate-50 dark:bg-slate-900";
+        return "bg-slate-50 dark:bg-slate-900 rounded-xl shadow-[0_12px_60px_rgba(0,0,0,0.2)]  border-2 border-gray-300";
     }
   };
 

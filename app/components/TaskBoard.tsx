@@ -55,7 +55,7 @@ export function TaskBoard() {
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   const handleAddTask = () => {
@@ -102,7 +102,9 @@ export function TaskBoard() {
     ];
     if (validStatuses.includes(overId as TaskStatus)) {
       const updatedTasks = tasks.map((task) =>
-        task.id === active.id ? { ...task, status: overId as TaskStatus } : task
+        task.id === active.id
+          ? { ...task, status: overId as TaskStatus }
+          : task,
       );
       setTasks(updatedTasks);
     }
@@ -141,7 +143,7 @@ export function TaskBoard() {
     if (validStatuses.includes(overId as TaskStatus)) {
       const statusTasks = tasks.filter((task) => task.status === overId);
       setTasks(
-        reorderTasks(tasks, activeId, overId as TaskStatus, statusTasks.length)
+        reorderTasks(tasks, activeId, overId as TaskStatus, statusTasks.length),
       );
     }
     // If dropped over another task
@@ -149,7 +151,7 @@ export function TaskBoard() {
       const overTask = tasks.find((task) => task.id === overId);
       if (overTask) {
         const statusTasks = tasks.filter(
-          (task) => task.status === overTask.status
+          (task) => task.status === overTask.status,
         );
         const overIndex = statusTasks.findIndex((task) => task.id === overId);
         setTasks(reorderTasks(tasks, activeId, overTask.status, overIndex));
@@ -223,7 +225,7 @@ export function TaskBoard() {
         </div>
 
         {/* Central Floating Add Button */}
-        <div className="absolute left-1/2 top-48 transform -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className="absolute left-1/2 top-52 transform -translate-x-1/2 -translate-y-1/2 z-10">
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="rounded-full h-16 w-16 shadow-xl bg-primary flex items-center justify-center">
